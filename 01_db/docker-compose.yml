@@ -1,0 +1,34 @@
+version: '3'
+services:
+
+  oikura-mysql:
+    container_name: 'oikura.db.mysql'
+    image: mysql:5.7
+    #ports:
+    #  - '13006:3306'
+    networks:
+      - oikura-dev-network 
+    environment:
+      MYSQL_DATABASE: oikura-local-dev-db
+      MYSQL_USER: twdev
+      MYSQL_PASSWORD: eotwdev5pass
+      MYSQL_ROOT_PASSWORD: rootTwsDev3
+    volumes:
+      - ./db/data:/var/lib/mysql
+
+  oikura-myadmin:
+    container_name: 'oikura.myadmin'
+    depends_on:
+      - oikura-mysql
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: oikura-mysql
+    restart: always
+    ports:
+      - "50021:80"
+    networks:
+      - oikura-dev-network
+
+networks:
+  oikura-dev-network:
+    external: true
